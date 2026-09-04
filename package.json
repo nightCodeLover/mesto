@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "lint": "prettier . --check",
-    "lint:fix": "prettier . --write"
+    "lint": "npx eslint \"src/**/*.ts\"",
+    "lint:fix": "npx eslint \"src/**/*.ts\" --fix"
   },
   "keywords": [],
   "author": "",
@@ -14,10 +14,15 @@
   "devDependencies": {
     "@types/express": "^5.0.6",
     "@types/node": "^26.4.1",
+    "@typescript-eslint/eslint-plugin": "^8.69.0",
+    "@typescript-eslint/parser": "^8.69.0",
+    "eslint": "^8.57.1",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.2",
     "prettier": "3.9.6",
     "ts-node-dev": "^2.0.0",
     "tsx": "^4.23.13",
-    "typescript": "^7.0.2"
+    "typescript": "^5.9.2"
   },
   "dependencies": {
     "express": "^5.2.1",
