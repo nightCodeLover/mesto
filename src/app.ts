@@ -1,10 +1,9 @@
 import dotenv from "dotenv";
-import express, { NextFunction } from "express";
+import express from "express";
 
+import type { Request } from "express";
 import { connectMongoClient } from "./db";
 import { createAppRouter } from "./routes";
-import { UserModel } from "./models";
-import type { Request, Response } from "express";
 
 dotenv.config();
 

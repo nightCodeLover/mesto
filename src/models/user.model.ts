@@ -9,19 +9,19 @@ export interface UserModel {
 const userSchema = new Schema({
   name: {
     type: String,
-    require: true,
+    required: true,
     minlength: 2,
     maxlength: 30,
   },
   about: {
     type: String,
-    require: true,
+    required: true,
     minlength: 2,
-    maxlength: 200,
+    maxlength: 30,
   },
   avatar: {
     type: String,
-    require: true,
+    required: true,
   },
 });
 

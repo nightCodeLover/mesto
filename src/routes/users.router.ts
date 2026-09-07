@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { MongoClient } from "mongodb";
 import {
   createGetUserByIdController,
   createGetUsersController,
@@ -6,7 +7,6 @@ import {
   createUpdateUserController,
   createUpdateUsersAvatarController,
 } from "../controllers";
-import { MongoClient } from "mongodb";
 import { validateUser, validateUpdateUserAvatar } from "../models";
 
 const createGetUsersRouter = (client: MongoClient) => {
@@ -24,7 +24,7 @@ const createGetUserByIdRouter = (client: MongoClient) => {
 
   const controller = createGetUserByIdController(client);
 
-  router.get(`/:id`, controller);
+  router.get("/:id", controller);
 
   return router;
 };

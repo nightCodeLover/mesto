@@ -33,7 +33,7 @@ const createDeleteCardRouter = (client: MongoClient) => {
 
   const controller = createDeleteCardController(client);
 
-  router.delete(`/:id`, controller);
+  router.delete("/:id", controller);
 
   return router;
 };
@@ -43,7 +43,7 @@ const createPutLikeOnCardRouter = (client: MongoClient) => {
 
   const controller = createPutCardLikesController(client);
 
-  router.put(`/:cardId/likes`, controller);
+  router.put("/:cardId/likes", controller);
 
   return router;
 };
@@ -53,7 +53,7 @@ const createDeleteLikeFromCardRouter = (client: MongoClient) => {
 
   const controller = createDeleteLikeFromCardController(client);
 
-  router.delete(`/:cardId/likes`, controller);
+  router.delete("/:cardId/likes", controller);
 
   return router;
 };

@@ -13,7 +13,7 @@
   },
   "plugins": [
     "@typescript-eslint",
-    "@eslint-plugin-import"
+    "import"
   ],
   "settings": {
     "import/resolver": {
@@ -31,6 +31,8 @@
     ]
   },
   "rules": {
+    "quotes": ["error", "double"],
+    "import/prefer-default-export": "off",
     "no-underscore-dangle": [
       "error",
       {

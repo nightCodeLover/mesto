@@ -1,11 +1,11 @@
+import { MongoClient, ObjectId } from "mongodb";
+import type { Response, Request } from "express";
 import {
   CardModel,
   CARDS_COLLECTION_NAME,
   UserModel,
   USERS_COLLECTION_NAME,
 } from "../models";
-import { MongoClient, ObjectId } from "mongodb";
-import type { Response, Request } from "express";
 import type { RequestWithUser } from "../app";
 import { cardsErrors, userErrors } from "./errors";
 
@@ -17,11 +17,10 @@ export const likeCard = ({
   client: MongoClient;
   cardId: string;
   userId: string;
-}) =>
-  client
-    .db()
-    .collection<CardModel>(CARDS_COLLECTION_NAME)
-    .updateOne({ _id: new ObjectId(cardId) }, { $addToSet: { likes: userId } });
+}) => client
+  .db()
+  .collection<CardModel>(CARDS_COLLECTION_NAME)
+  .updateOne({ _id: new ObjectId(cardId) }, { $addToSet: { likes: userId } });
 
 export const dislikeCard = async ({
   cardId,
@@ -31,11 +30,10 @@ export const dislikeCard = async ({
   client: MongoClient;
   cardId: string;
   userId: string;
-}) =>
-  client
-    .db()
-    .collection<CardModel>(CARDS_COLLECTION_NAME)
-    .updateOne({ _id: new ObjectId(cardId) }, { $pull: { likes: userId } });
+}) => client
+  .db()
+  .collection<CardModel>(CARDS_COLLECTION_NAME)
+  .updateOne({ _id: new ObjectId(cardId) }, { $pull: { likes: userId } });
 
 export const createCard = async ({
   link,
@@ -53,7 +51,9 @@ export const createCard = async ({
   await client
     .db()
     .collection<CardModel>(CARDS_COLLECTION_NAME)
-    .insertOne({ createdAt, link, name, owner: ownerId, likes: [] });
+    .insertOne({
+      createdAt, link, name, owner: ownerId, likes: [],
+    });
 };
 
 export const getMockOwner = (req: Request) => {

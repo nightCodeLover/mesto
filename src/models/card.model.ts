@@ -12,27 +12,27 @@ export interface CardModel {
 const cardSchema = new Schema({
   name: {
     type: String,
-    require: true,
+    required: true,
     minlength: 2,
     maxlength: 30,
   },
   link: {
     type: String,
-    require: true,
+    required: true,
   },
   owner: {
     type: ObjectId,
-    require: true,
+    required: true,
   },
   likes: {
     type: [Schema.Types.ObjectId],
-    require: true,
+    required: true,
     default: [],
   },
   createdAt: {
     type: Date,
-    require: true,
-    default: Date.now(),
+    required: true,
+    default: Date.now,
   },
 });
 
