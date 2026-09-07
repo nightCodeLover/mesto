@@ -36,4 +36,6 @@ const cardSchema = new Schema({
   },
 });
 
+export const CARDS_COLLECTION_NAME = "cards";
+
 export const Card = mongoose.model<CardModel>("card", cardSchema);

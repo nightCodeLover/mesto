@@ -3,7 +3,7 @@ import mongoose, { Schema } from "mongoose";
 export interface UserModel {
   name: string;
   about: string;
-  link: string;
+  avatar: string;
 }
 
 const userSchema = new Schema({
@@ -19,7 +19,7 @@ const userSchema = new Schema({
     minlength: 2,
     maxlength: 200,
   },
-  link: {
+  avatar: {
     type: String,
     require: true,
   },
