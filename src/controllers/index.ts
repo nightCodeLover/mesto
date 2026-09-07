@@ -1,17 +1,17 @@
 export {
-  createGetUsersController,
-  createGetUserByIdController,
-  createCreateUserController,
-  createUpdateUsersAvatarController,
-  createUpdateUserController,
+  getUsersController,
+  getUserByIdController,
+  createUserController,
+  updateUsersAvatarController,
+  updateUserController,
 } from "./users.controller";
 
 export {
-  createPostCardController,
-  createGetCardsController,
-  createDeleteCardController,
-  createPutCardLikesController,
-  createDeleteLikeFromCardController,
+  postCardController,
+  getCardsController,
+  deleteCardController,
+  putCardLikesController,
+  deleteLikeFromCardController,
 } from "./cards.controller";
 
 export { cardsErrors, userErrors } from "./errors";

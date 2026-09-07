@@ -1,71 +1,60 @@
-import { MongoClient } from "mongodb";
 import { Router } from "express";
 import {
-  createDeleteCardController,
-  createGetCardsController,
-  createPostCardController,
-  createPutCardLikesController,
-  createDeleteLikeFromCardController,
+  deleteCardController,
+  getCardsController,
+  postCardController,
+  putCardLikesController,
+  deleteLikeFromCardController,
 } from "../controllers";
 
-const createGetCardsRouter = (client: MongoClient) => {
+const createGetCardsRouter = () => {
   const router = Router();
 
-  const controller = createGetCardsController(client);
-
-  router.get("/", controller);
+  router.get("/", getCardsController);
 
   return router;
 };
 
-const createPostCardRouter = (client: MongoClient) => {
+const createPostCardRouter = () => {
   const router = Router();
 
-  const controller = createPostCardController(client);
-
-  router.post("/", controller);
+  router.post("/", postCardController);
 
   return router;
 };
 
-const createDeleteCardRouter = (client: MongoClient) => {
+const createDeleteCardRouter = () => {
   const router = Router();
 
-  const controller = createDeleteCardController(client);
-
-  router.delete("/:id", controller);
+  router.delete("/:id", deleteCardController);
 
   return router;
 };
 
-const createPutLikeOnCardRouter = (client: MongoClient) => {
+const createPutLikeOnCardRouter = () => {
   const router = Router();
 
-  const controller = createPutCardLikesController(client);
-
-  router.put("/:cardId/likes", controller);
+  router.put("/:cardId/likes", putCardLikesController);
 
   return router;
 };
 
-const createDeleteLikeFromCardRouter = (client: MongoClient) => {
+const createDeleteLikeFromCardRouter = () => {
   const router = Router();
 
-  const controller = createDeleteLikeFromCardController(client);
-
-  router.delete("/:cardId/likes", controller);
+  router.delete("/:cardId/likes", deleteLikeFromCardController);
 
   return router;
 };
 
-export const createCardsRouter = (client: MongoClient) => {
+export const createCardsRouter = () => {
   const router = Router();
 
-  const getCardsRouter = createGetCardsRouter(client);
-  const postCardRouter = createPostCardRouter(client);
-  const deleteCardRouter = createDeleteCardRouter(client);
-  const putLikeOnCardRouter = createPutLikeOnCardRouter(client);
-  const deleteLikeFromCardRouter = createDeleteLikeFromCardRouter(client);
+  const getCardsRouter = createGetCardsRouter();
+  const postCardRouter = createPostCardRouter();
+  const deleteCardRouter = createDeleteCardRouter();
+  const putLikeOnCardRouter = createPutLikeOnCardRouter();
+  const deleteLikeFromCardRouter = createDeleteLikeFromCardRouter();
 
   router.use(getCardsRouter);
   router.use(postCardRouter);

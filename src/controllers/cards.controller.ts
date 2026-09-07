@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
-import { MongoClient, ObjectId } from "mongodb";
-import { CardModel, CARDS_COLLECTION_NAME } from "../models";
+import mongoose from "mongoose";
+import { Card, CardModel } from "../models";
 import {
   checkCardInDb,
   createCard,
@@ -10,20 +10,13 @@ import {
 } from "./helpers";
 import { cardsErrors } from "./errors";
 
-export const createGetCardsController = (client: MongoClient) => async (
-  req: Request,
-  res: Response,
-) => {
-  const cards = await client
-    .db()
-    .collection<CardModel>(CARDS_COLLECTION_NAME)
-    .find({})
-    .toArray();
+export const getCardsController = async (req: Request, res: Response) => {
+  const cards = await Card.find({});
 
   res.send(cards);
 };
 
-export const createPostCardController = (client: MongoClient) => async (
+export const postCardController = async (
   req: Request<Record<string, never>, unknown, CardModel>,
   res: Response,
 ) => {
@@ -31,14 +24,28 @@ export const createPostCardController = (client: MongoClient) => async (
 
   const mockOwner = getMockOwner(req);
 
-  await createCard({
-    name, link, client, ownerId: mockOwner,
-  });
+  try {
+    await createCard({
+      name,
+      link,
+      ownerId: mockOwner,
+    });
 
-  res.send({});
+    res.send({});
+  } catch (error) {
+    if (error instanceof mongoose.Error.ValidationError) {
+      const { message, code } = cardsErrors.incorrectPostData;
+
+      res.status(code).send({ message });
+
+      return;
+    }
+
+    throw error;
+  }
 };
 
-export const createPutCardLikesController = (client: MongoClient) => async (
+export const putCardLikesController = async (
   req: Request<{ cardId: string }>,
   res: Response,
 ) => {
@@ -46,66 +53,91 @@ export const createPutCardLikesController = (client: MongoClient) => async (
 
   const mockOwner = getMockOwner(req);
 
-  const card = await checkCardInDb({ cardId, res, client });
+  const card = await checkCardInDb({ cardId, res });
 
   if (!card) return;
 
-  const updateResult = await likeCard({ client, cardId, userId: mockOwner });
+  try {
+    const updatedCard = await likeCard({ cardId, userId: mockOwner });
 
-  if (updateResult.modifiedCount === 0) {
-    const { message, code } = cardsErrors.incorrectPutLike;
+    if (!updatedCard) {
+      const { message, code } = cardsErrors.incorrectPutLike;
 
-    res.status(code).send({
-      message,
-    });
+      res.status(code).send({
+        message,
+      });
 
-    return;
+      return;
+    }
+
+    res.send({});
+  } catch (error) {
+    if (error instanceof mongoose.Error.ValidationError) {
+      const { message, code } = cardsErrors.incorrectPutLike;
+
+      res.status(code).send({ message });
+      return;
+    }
+
+    throw error;
   }
-
-  res.send({});
 };
 
-export const createDeleteLikeFromCardController = (client: MongoClient) => async (
+export const deleteLikeFromCardController = async (
   req: Request<{ cardId: string }>,
   res: Response,
 ) => {
   const { cardId } = req.params;
 
-  const card = await checkCardInDb({ cardId, res, client });
+  const card = await checkCardInDb({ cardId, res });
 
   if (!card) return;
 
   const mockOwner = getMockOwner(req);
-
-  const updateResult = await dislikeCard({
-    cardId,
-    client,
-    userId: mockOwner,
-  });
-
-  if (updateResult.modifiedCount === 0) {
-    const { message, code } = cardsErrors.incorrectDeleteLike;
-
-    res.status(code).send({
-      message,
+  try {
+    const updatedCard = await dislikeCard({
+      cardId,
+      userId: mockOwner,
     });
 
-    return;
-  }
+    if (!updatedCard) {
+      const { message, code } = cardsErrors.incorrectDeleteLike;
 
-  res.send({});
+      res.status(code).send({
+        message,
+      });
+
+      return;
+    }
+
+    res.send({});
+  } catch (error) {
+    if (error instanceof mongoose.Error.ValidationError) {
+      const { message, code } = cardsErrors.incorrectDeleteLike;
+
+      res.status(code).send({ message });
+      return;
+    }
+
+    throw error;
+  }
 };
 
-export const createDeleteCardController = (client: MongoClient) => async (
+export const deleteCardController = async (
   req: Request<{ id: string }>,
   res: Response,
 ) => {
   const { id } = req.params;
 
-  await client
-    .db()
-    .collection<CardModel>(CARDS_COLLECTION_NAME)
-    .deleteOne({ _id: new ObjectId(id) });
+  const card = await Card.findByIdAndDelete(id);
+
+  if (!card) {
+    const { message, code } = cardsErrors.noCard;
+
+    res.status(code).send({ message });
+
+    return;
+  }
 
   res.send({});
 };

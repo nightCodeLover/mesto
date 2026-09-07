@@ -1,72 +1,60 @@
 import { Router } from "express";
-import { MongoClient } from "mongodb";
 import {
-  createGetUserByIdController,
-  createGetUsersController,
-  createCreateUserController,
-  createUpdateUserController,
-  createUpdateUsersAvatarController,
+  getUserByIdController,
+  getUsersController,
+  createUserController,
+  updateUserController,
+  updateUsersAvatarController,
 } from "../controllers";
-import { validateUser, validateUpdateUserAvatar } from "../models";
 
-const createGetUsersRouter = (client: MongoClient) => {
+const createGetUsersRouter = () => {
   const router = Router();
 
-  const controller = createGetUsersController(client);
-
-  router.get("/", controller);
+  router.get("/", getUsersController);
 
   return router;
 };
 
-const createGetUserByIdRouter = (client: MongoClient) => {
+const createGetUserByIdRouter = () => {
   const router = Router();
 
-  const controller = createGetUserByIdController(client);
-
-  router.get("/:id", controller);
+  router.get("/:id", getUserByIdController);
 
   return router;
 };
 
-const createPostUserRouter = (client: MongoClient) => {
+const createPostUserRouter = () => {
   const router = Router();
 
-  const controller = createCreateUserController(client);
-
-  router.post("/", validateUser, controller);
+  router.post("/", createUserController);
 
   return router;
 };
 
-const createUpdateUserRouter = (client: MongoClient) => {
+const createUpdateUserRouter = () => {
   const router = Router();
 
-  const controller = createUpdateUserController(client);
-
-  router.patch("/me", validateUser, controller);
+  router.patch("/me", updateUserController);
 
   return router;
 };
 
-const createUpdateUserAvatarRouter = (client: MongoClient) => {
+const createUpdateUserAvatarRouter = () => {
   const router = Router();
 
-  const controller = createUpdateUsersAvatarController(client);
-
-  router.patch("/me/avatar", validateUpdateUserAvatar, controller);
+  router.patch("/me/avatar", updateUsersAvatarController);
 
   return router;
 };
 
-export const createUsersRouter = (client: MongoClient) => {
+export const createUsersRouter = () => {
   const router = Router();
 
-  const getUsersRouter = createGetUsersRouter(client);
-  const getUserByIdRouter = createGetUserByIdRouter(client);
-  const postUserRouter = createPostUserRouter(client);
-  const updateUserRouter = createUpdateUserRouter(client);
-  const updateUserAvatarRouter = createUpdateUserAvatarRouter(client);
+  const getUsersRouter = createGetUsersRouter();
+  const getUserByIdRouter = createGetUserByIdRouter();
+  const postUserRouter = createPostUserRouter();
+  const updateUserRouter = createUpdateUserRouter();
+  const updateUserAvatarRouter = createUpdateUserAvatarRouter();
 
   router.use(getUsersRouter);
   router.use(getUserByIdRouter);

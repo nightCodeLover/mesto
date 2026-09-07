@@ -1,11 +1,10 @@
-import mongoose, { Schema } from "mongoose";
-import { ObjectId } from "mongodb";
+import mongoose, { Schema, Types } from "mongoose";
 
 export interface CardModel {
   name: string;
   link: string;
-  owner: string;
-  likes: string[];
+  owner: Types.ObjectId;
+  likes: Types.ObjectId[];
   createdAt: Date;
 }
 
@@ -21,7 +20,7 @@ const cardSchema = new Schema({
     required: true,
   },
   owner: {
-    type: ObjectId,
+    type: Schema.Types.ObjectId,
     required: true,
   },
   likes: {
@@ -35,7 +34,5 @@ const cardSchema = new Schema({
     default: Date.now,
   },
 });
-
-export const CARDS_COLLECTION_NAME = "cards";
 
 export const Card = mongoose.model<CardModel>("card", cardSchema);

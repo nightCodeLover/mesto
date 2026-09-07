@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import express from "express";
 
 import type { Request } from "express";
-import { connectMongoClient } from "./db";
+import { connectMongoDb } from "./db";
 import { createAppRouter } from "./routes";
 
 dotenv.config();
@@ -14,7 +14,7 @@ export type RequestWithUser = Request & {
 };
 
 const startApp = async () => {
-  const client = await connectMongoClient();
+  await connectMongoDb();
   const app = express();
 
   const { PORT } = process.env;
@@ -37,7 +37,7 @@ const startApp = async () => {
     console.log("Server started on port", PORT);
   });
 
-  const router = createAppRouter(client);
+  const router = createAppRouter();
 
   app.use(router);
 };

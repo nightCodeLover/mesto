@@ -25,6 +25,4 @@ const userSchema = new Schema({
   },
 });
 
-export const USERS_COLLECTION_NAME = "users";
-
 export const User = mongoose.model<UserModel>("user", userSchema);

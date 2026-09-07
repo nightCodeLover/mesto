@@ -1,15 +1,11 @@
-import { MongoClient } from "mongodb";
+import mongoose from "mongoose";
 
-export const connectMongoClient = async () => {
+export const connectMongoDb = async () => {
   if (!process.env.DATABASE_URL) {
     throw new Error("MongoDB connection error");
   }
 
-  const client = new MongoClient(process.env.DATABASE_URL);
-
-  await client.connect();
+  await mongoose.connect(process.env.DATABASE_URL);
 
   console.log("Connected to MongoDb");
-
-  return client;
 };
