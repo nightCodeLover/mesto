@@ -33,13 +33,13 @@ const startApp = async () => {
 
   app.use(express.json());
 
-  app.listen(PORT, () => {
-    console.log("Server started on port", PORT);
-  });
-
   const router = createAppRouter();
 
   app.use(router);
+
+  app.listen(PORT, () => {
+    console.log("Server started on port", PORT);
+  });
 };
 
 startApp().catch((err) => {

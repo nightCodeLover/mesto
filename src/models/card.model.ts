@@ -1,4 +1,6 @@
 import mongoose, { Schema, Types } from "mongoose";
+import { validateLink } from "./helpers";
+import { INCORRECT_LINK_MESSAGE } from "./constants";
 
 export interface CardModel {
   name: string;
@@ -18,6 +20,7 @@ const cardSchema = new Schema({
   link: {
     type: String,
     required: true,
+    validate: { validator: validateLink, message: INCORRECT_LINK_MESSAGE },
   },
   owner: {
     type: Schema.Types.ObjectId,

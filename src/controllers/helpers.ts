@@ -2,6 +2,10 @@ import type { Response, Request } from "express";
 import { Card, User } from "../models";
 import type { RequestWithUser } from "../app";
 import { cardsErrors, userErrors } from "./errors";
+import mongoose from "mongoose";
+
+export const isCorrectId = (id: string): boolean =>
+  mongoose.isObjectIdOrHexString(id);
 
 export const likeCard = ({
   cardId,
@@ -52,40 +56,4 @@ export const getMockOwner = (req: Request) => {
   const authenticatedRequest = req as typeof req & RequestWithUser;
 
   return authenticatedRequest.user._id;
-};
-
-export const checkCardInDb = async ({
-  cardId,
-  res,
-}: {
-  cardId: string;
-  res: Response;
-}) => {
-  const card = await Card.findById(cardId);
-
-  if (!card) {
-    const { code, message } = cardsErrors.noCard;
-
-    res.status(code).send({ message });
-  }
-
-  return card;
-};
-
-export const checkUserInDb = async ({
-  id,
-  res,
-}: {
-  id: string;
-  res: Response;
-}) => {
-  const user = await User.findById(id);
-
-  if (!user) {
-    const { code, message } = userErrors.noUser;
-
-    res.status(code).send({ message });
-  }
-
-  return user;
 };

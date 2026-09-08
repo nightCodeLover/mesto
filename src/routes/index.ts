@@ -2,6 +2,10 @@ import { Router } from "express";
 import { createUsersRouter } from "./users.router";
 import { createCardsRouter } from "./cards.router";
 import { CARDS_ROUTE, USERS_ROUTE } from "./constants";
+import {
+  internalErrorMiddleware,
+  unknownPathErrorMiddleware,
+} from "./error.middleware";
 
 export const createAppRouter = () => {
   const appRouter = Router();
@@ -11,6 +15,9 @@ export const createAppRouter = () => {
 
   appRouter.use(USERS_ROUTE, usersRouter);
   appRouter.use(CARDS_ROUTE, cardsRouter);
+
+  appRouter.use(unknownPathErrorMiddleware);
+  appRouter.use(internalErrorMiddleware);
 
   return appRouter;
 };

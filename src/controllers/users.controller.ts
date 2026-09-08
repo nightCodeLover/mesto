@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 import mongoose from "mongoose";
 import { User, UserModel } from "../models";
 import type { RequestWithUser } from "../app";
-import { checkUserInDb } from "./helpers";
+import { isCorrectId } from "./helpers";
 import { userErrors } from "./errors";
 import { UpdateUserAvatar, UpdateUserModel } from "./types";
 
@@ -18,9 +18,25 @@ export const getUserByIdController = async (
 ) => {
   const { id } = req.params;
 
-  const user = await checkUserInDb({ res, id });
+  const isCorrectUserId = isCorrectId(id);
 
-  if (!user) return;
+  if (!isCorrectUserId) {
+    const { message, code } = userErrors.incorrectId;
+
+    res.status(code).send({ message });
+
+    return;
+  }
+
+  const user = await User.findById(id);
+
+  if (!user) {
+    const { code, message } = userErrors.noUser;
+
+    res.status(code).send({ message });
+
+    return;
+  }
 
   res.send(user);
 };
@@ -34,7 +50,7 @@ export const createUserController = async (
   try {
     await User.create({ name, avatar, about });
 
-    res.send({});
+    res.status(201).send({});
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
       const { code, message } = userErrors.incorrectPostData;

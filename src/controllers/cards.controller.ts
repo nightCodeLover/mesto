@@ -2,11 +2,11 @@ import type { Request, Response } from "express";
 import mongoose from "mongoose";
 import { Card, CardModel } from "../models";
 import {
-  checkCardInDb,
   createCard,
   getMockOwner,
   dislikeCard,
   likeCard,
+  isCorrectId,
 } from "./helpers";
 import { cardsErrors } from "./errors";
 
@@ -31,7 +31,7 @@ export const postCardController = async (
       ownerId: mockOwner,
     });
 
-    res.send({});
+    res.status(201).send({});
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
       const { message, code } = cardsErrors.incorrectPostData;
@@ -51,11 +51,27 @@ export const putCardLikesController = async (
 ) => {
   const { cardId } = req.params;
 
+  const isCorrectCardId = isCorrectId(cardId);
+
+  if (!isCorrectCardId) {
+    const { message, code } = cardsErrors.incorrectId;
+
+    res.status(code).send({ message });
+
+    return;
+  }
+
   const mockOwner = getMockOwner(req);
 
-  const card = await checkCardInDb({ cardId, res });
+  const card = await Card.findById(cardId);
 
-  if (!card) return;
+  if (!card) {
+    const { code, message } = cardsErrors.noCard;
+
+    res.status(code).send({ message });
+
+    return;
+  }
 
   try {
     const updatedCard = await likeCard({ cardId, userId: mockOwner });
@@ -89,9 +105,25 @@ export const deleteLikeFromCardController = async (
 ) => {
   const { cardId } = req.params;
 
-  const card = await checkCardInDb({ cardId, res });
+  const isCorrectCardId = isCorrectId(cardId);
 
-  if (!card) return;
+  if (!isCorrectCardId) {
+    const { message, code } = cardsErrors.incorrectId;
+
+    res.status(code).send({ message });
+
+    return;
+  }
+
+  const card = await Card.findById(cardId);
+
+  if (!card) {
+    const { code, message } = cardsErrors.noCard;
+
+    res.status(code).send({ message });
+
+    return;
+  }
 
   const mockOwner = getMockOwner(req);
   try {
@@ -128,6 +160,16 @@ export const deleteCardController = async (
   res: Response,
 ) => {
   const { id } = req.params;
+
+  const isCorrectCardId = isCorrectId(id);
+
+  if (!isCorrectCardId) {
+    const { message, code } = cardsErrors.incorrectId;
+
+    res.status(code).send({ message });
+
+    return;
+  }
 
   const card = await Card.findByIdAndDelete(id);
 

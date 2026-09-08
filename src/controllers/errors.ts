@@ -15,6 +15,10 @@ export const userErrors = {
     code: 400,
     message: "Переданы некорректные данные при обновлении аватара",
   },
+  incorrectId: {
+    code: 400,
+    message: "Передан некорректный id",
+  },
 };
 
 export const cardsErrors = {
@@ -34,4 +38,19 @@ export const cardsErrors = {
     code: 400,
     message: " Переданы некорректные данные для снятия лайка",
   },
+  incorrectId: {
+    code: 400,
+    message: "Передан некорректный id",
+  },
+};
+
+export const internalError = {
+  code: 500,
+  message: "На сервере произошла ошибка",
+};
+
+export const unknownPathError = {
+  code: 404,
+  message:
+    "Карточка или пользователь не найден или был запрошен несуществующий роут",
 };

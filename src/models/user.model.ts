@@ -1,4 +1,6 @@
 import mongoose, { Schema } from "mongoose";
+import { validateLink } from "./helpers";
+import { INCORRECT_LINK_MESSAGE } from "./constants";
 
 export interface UserModel {
   name: string;
@@ -22,6 +24,7 @@ const userSchema = new Schema({
   avatar: {
     type: String,
     required: true,
+    validate: { validator: validateLink, message: INCORRECT_LINK_MESSAGE },
   },
 });
 
