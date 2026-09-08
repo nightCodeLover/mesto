@@ -81,6 +81,14 @@ export const updateUserController = async (
     if (avatar && avatar.length) updates.avatar = avatar;
     if (about && about.length) updates.about = about;
 
+    if (!Object.keys(updates).length) {
+      const { code, message } = userErrors.incorrectPatchUserData;
+
+      res.status(code).send({ message });
+
+      return;
+    }
+
     const user = await User.findByIdAndUpdate(
       id,
       { $set: updates },
