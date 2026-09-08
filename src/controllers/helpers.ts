@@ -1,11 +1,9 @@
-import type { Response, Request } from "express";
-import { Card, User } from "../models";
-import type { RequestWithUser } from "../app";
-import { cardsErrors, userErrors } from "./errors";
+import type { Request } from "express";
 import mongoose from "mongoose";
+import { Card } from "../models";
+import type { RequestWithUser } from "../app";
 
-export const isCorrectId = (id: string): boolean =>
-  mongoose.isObjectIdOrHexString(id);
+export const isCorrectId = (id: string): boolean => mongoose.isObjectIdOrHexString(id);
 
 export const likeCard = ({
   cardId,
@@ -13,12 +11,11 @@ export const likeCard = ({
 }: {
   cardId: string;
   userId: string;
-}) =>
-  Card.findByIdAndUpdate(
-    cardId,
-    { $addToSet: { likes: userId } },
-    { runValidators: true, new: true },
-  );
+}) => Card.findByIdAndUpdate(
+  cardId,
+  { $addToSet: { likes: userId } },
+  { runValidators: true, new: true },
+);
 
 export const dislikeCard = async ({
   cardId,
@@ -26,15 +23,14 @@ export const dislikeCard = async ({
 }: {
   cardId: string;
   userId: string;
-}) =>
-  Card.findByIdAndUpdate(
-    cardId,
-    { $pull: { likes: userId } },
-    {
-      new: true,
-      runValidators: true,
-    },
-  );
+}) => Card.findByIdAndUpdate(
+  cardId,
+  { $pull: { likes: userId } },
+  {
+    new: true,
+    runValidators: true,
+  },
+);
 
 export const createCard = async ({
   link,

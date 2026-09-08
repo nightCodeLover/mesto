@@ -5,7 +5,6 @@ import {
   createUserController,
   updateUserController,
   updateUsersAvatarController,
-  errorController,
 } from "../controllers";
 
 const createGetUsersRouter = () => {

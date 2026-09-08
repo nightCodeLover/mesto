@@ -3,10 +3,15 @@ import { internalError, unknownPathError } from "../controllers/errors";
 
 export const internalErrorMiddleware = (
   error: Error,
-  req: Request,
+  _req: Request,
   res: Response,
   next: NextFunction,
 ) => {
+  if (res.headersSent) {
+    next(error);
+    return;
+  }
+
   const { message, code } = internalError;
 
   res.status(code).send({ message });

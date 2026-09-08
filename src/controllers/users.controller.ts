@@ -77,9 +77,9 @@ export const updateUserController = async (
 
     const updates: UpdateUserModel = {};
 
-    if (name) updates.name = name;
-    if (avatar) updates.avatar = avatar;
-    if (about) updates.about = about;
+    if (name && name.length) updates.name = name;
+    if (avatar && avatar.length) updates.avatar = avatar;
+    if (about && about.length) updates.about = about;
 
     const user = await User.findByIdAndUpdate(
       id,

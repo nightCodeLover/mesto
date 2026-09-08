@@ -30,7 +30,6 @@ const startApp = async () => {
 
     next();
   });
-
   app.use(express.json());
 
   const router = createAppRouter();

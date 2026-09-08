@@ -87,7 +87,7 @@ export const putCardLikesController = async (
       return;
     }
 
-    res.send(card);
+    res.send(updatedCard);
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
       const { message, code } = cardsErrors.incorrectPutLike;
@@ -143,7 +143,7 @@ export const deleteLikeFromCardController = async (
       return;
     }
 
-    res.send(card);
+    res.send(updatedCard);
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
       const { message, code } = cardsErrors.incorrectDeleteLike;
