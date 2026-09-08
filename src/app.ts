@@ -4,6 +4,7 @@ import express from "express";
 import type { Request } from "express";
 import { connectMongoDb } from "./db";
 import { createAppRouter } from "./routes";
+import { internalErrorMiddleware } from "./routes/error.middleware";
 
 dotenv.config();
 
@@ -35,6 +36,7 @@ const startApp = async () => {
   const router = createAppRouter();
 
   app.use(router);
+  app.use(internalErrorMiddleware);
 
   app.listen(PORT, () => {
     console.log("Server started on port", PORT);
