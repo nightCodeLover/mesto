@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import mongoose from "mongoose";
+import { CREATED_STATUS_CODE } from "../constants";
 import { User, UserModel } from "../models";
 import type { RequestWithUser } from "../app";
 import { isCorrectId } from "./helpers";
@@ -50,7 +51,7 @@ export const createUserController = async (
   try {
     await User.create({ name, avatar, about });
 
-    res.status(201).send({});
+    res.status(CREATED_STATUS_CODE).send({});
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
       const { code, message } = userErrors.incorrectPostData;
@@ -137,7 +138,7 @@ export const updateUsersAvatarController = async (
 
       res.status(code).send({ message });
     } else {
-      res.send({});
+      res.send(user);
     }
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {

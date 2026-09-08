@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import mongoose from "mongoose";
+import { CREATED_STATUS_CODE } from "../constants";
 import { Card, CardModel } from "../models";
 import {
   createCard,
@@ -31,7 +32,7 @@ export const postCardController = async (
       ownerId: mockOwner,
     });
 
-    res.status(201).send({});
+    res.status(CREATED_STATUS_CODE).send({});
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
       const { message, code } = cardsErrors.incorrectPostData;
@@ -86,7 +87,7 @@ export const putCardLikesController = async (
       return;
     }
 
-    res.send({});
+    res.send(card);
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
       const { message, code } = cardsErrors.incorrectPutLike;
@@ -142,7 +143,7 @@ export const deleteLikeFromCardController = async (
       return;
     }
 
-    res.send({});
+    res.send(card);
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
       const { message, code } = cardsErrors.incorrectDeleteLike;
