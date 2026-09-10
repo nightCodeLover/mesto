@@ -5,7 +5,7 @@ import { User, UserModel } from "../models";
 import type { RequestWithUser } from "../app";
 import { isCorrectId } from "./helpers";
 import { userErrors } from "./errors";
-import { UpdateUserAvatar, UpdateUserModel } from "./types";
+import { LoginRequestBody, UpdateUserAvatar, UpdateUserModel } from "./types";
 
 export const getUsersController = async (req: Request, res: Response) => {
   const users = await User.find({});
@@ -46,10 +46,10 @@ export const createUserController = async (
   req: Request<Record<string, never>, unknown, UserModel>,
   res: Response,
 ) => {
-  const { name, avatar, about } = req.body;
+  const { name, avatar, about, password, email } = req.body;
 
   try {
-    await User.create({ name, avatar, about });
+    await User.create({ name, avatar, about, password, email });
 
     res.status(CREATED_STATUS_CODE).send({});
   } catch (error) {
@@ -158,4 +158,11 @@ export const updateUsersAvatarController = async (
 
     throw error;
   }
+};
+
+export const loginController = async (
+  req: Request<Record<string, unknown>, unknown, LoginRequestBody>,
+  res: Response,
+) => {
+  const { email, password } = req.body;
 };
