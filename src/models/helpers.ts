@@ -8,5 +8,6 @@ export const validateLink = (link: string) => {
   }
 };
 
-export const validateEmail = (email: string): boolean =>
-  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+export const validateEmail = (email: string): boolean => (
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+);
