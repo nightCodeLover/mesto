@@ -1,6 +1,7 @@
 import {
   BAD_REQUEST_ERROR_CODE,
   INTERNAL_SERVER_ERROR_CODE,
+  NO_AUTH_ERROR_CODE,
   NOT_FOUND_ERROR_CODE,
 } from "../constants";
 
@@ -24,6 +25,10 @@ export const userErrors = {
   incorrectId: {
     code: BAD_REQUEST_ERROR_CODE,
     message: "Передан некорректный id",
+  },
+  incorrectEmailPas: {
+    code: NO_AUTH_ERROR_CODE,
+    message: "Неверные логин или пароль",
   },
 };
 

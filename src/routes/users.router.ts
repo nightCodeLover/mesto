@@ -5,6 +5,7 @@ import {
   createUserController,
   updateUserController,
   updateUsersAvatarController,
+  loginController,
 } from "../controllers";
 
 const createGetUsersRouter = () => {
@@ -19,14 +20,6 @@ const createGetUserByIdRouter = () => {
   const router = Router();
 
   router.get("/:id", getUserByIdController);
-
-  return router;
-};
-
-const createPostUserRouter = () => {
-  const router = Router();
-
-  router.post("/", createUserController);
 
   return router;
 };
@@ -47,20 +40,38 @@ const createUpdateUserAvatarRouter = () => {
   return router;
 };
 
+const createLoginRouter = () => {
+  const router = Router();
+
+  router.post("/signin", loginController);
+
+  return router;
+};
+
+const createRegisterRouter = () => {
+  const router = Router();
+
+  router.post("/signup", createUserController);
+
+  return router;
+};
+
 export const createUsersRouter = () => {
   const router = Router();
 
   const getUsersRouter = createGetUsersRouter();
   const getUserByIdRouter = createGetUserByIdRouter();
-  const postUserRouter = createPostUserRouter();
   const updateUserRouter = createUpdateUserRouter();
   const updateUserAvatarRouter = createUpdateUserAvatarRouter();
+  const loginRouter = createLoginRouter();
+  const registerRouter = createRegisterRouter();
 
   router.use(getUsersRouter);
   router.use(getUserByIdRouter);
-  router.use(postUserRouter);
   router.use(updateUserRouter);
   router.use(updateUserAvatarRouter);
+  router.use(loginRouter);
+  router.use(registerRouter);
 
   return router;
 };
