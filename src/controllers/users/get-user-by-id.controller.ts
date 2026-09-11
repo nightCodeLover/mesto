@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import { User } from "../../models";
-import { userErrors } from "../errors";
+import { userErrors } from "../../errors";
 import { isCorrectId } from "../helpers";
 
 export const getUserByIdController = async (

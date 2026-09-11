@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 import mongoose from "mongoose";
 import type { RequestWithUser } from "../../app";
 import { User } from "../../models";
-import { userErrors } from "../errors";
+import { userErrors } from "../../errors";
 
 export type UpdateUserAvatar = {
   avatar: string;

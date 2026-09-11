@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import { Card } from "../../models";
-import { cardsErrors } from "../errors";
+import { cardsErrors } from "../../errors";
 import { isCorrectId } from "../helpers";
 
 export const deleteCardController = async (

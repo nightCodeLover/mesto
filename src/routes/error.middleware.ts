@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { internalError, unknownPathError } from "../controllers/errors";
+import { internalError, unknownPathError } from "../errors";
 
 export const internalErrorMiddleware = (
   error: Error,

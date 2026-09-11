@@ -3,7 +3,7 @@ import {
   INTERNAL_SERVER_ERROR_CODE,
   NO_AUTH_ERROR_CODE,
   NOT_FOUND_ERROR_CODE,
-} from "../constants";
+} from "./constants";
 
 export const userErrors = {
   incorrectPostData: {
@@ -64,4 +64,9 @@ export const unknownPathError = {
   code: NOT_FOUND_ERROR_CODE,
   message:
     "Карточка или пользователь не найден или был запрошен несуществующий роут",
+};
+
+export const noAuthError = {
+  code: NO_AUTH_ERROR_CODE,
+  message: "Необходима авторизация",
 };

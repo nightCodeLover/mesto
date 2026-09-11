@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import mongoose from "mongoose";
 import { Card } from "../../models";
-import { cardsErrors } from "../errors";
+import { cardsErrors } from "../../errors";
 import { getMockOwner, isCorrectId, likeCard } from "../helpers";
 
 export const putCardLikesController = async (

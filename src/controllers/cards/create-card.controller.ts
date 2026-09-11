@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 import mongoose from "mongoose";
 import { CREATED_STATUS_CODE } from "../../constants";
 import type { CardModel } from "../../models";
-import { cardsErrors } from "../errors";
+import { cardsErrors } from "../../errors";
 import { createCard, getMockOwner } from "../helpers";
 
 export const postCardController = async (

@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 import mongoose from "mongoose";
 import type { RequestWithUser } from "../../app";
 import { User, UserModel } from "../../models";
-import { userErrors } from "../errors";
+import { userErrors } from "../../errors";
 
 export type UpdateUserModel = Partial<UserModel>;
 

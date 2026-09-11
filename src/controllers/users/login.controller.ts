@@ -1,9 +1,10 @@
 import type { Request, Response } from "express";
 import { User } from "../../models";
-import { userErrors } from "../errors";
+import { userErrors } from "../../errors";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { JWT_TOKEN_AGE } from "../../constants";
+import { getJWTSecret } from "../../utils";
 
 type LoginRequestBody = {
   email: string;
@@ -40,11 +41,7 @@ export const loginController = async (
     return;
   }
 
-  const secret = process.env.JWT_SECRET;
-
-  if (!secret) {
-    throw new Error("Invalid JWT Secret provided");
-  }
+  const secret = getJWTSecret();
 
   const token = jwt.sign({ _id: user._id }, secret, {
     expiresIn: JWT_TOKEN_AGE,
