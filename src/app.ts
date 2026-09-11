@@ -1,18 +1,12 @@
 import dotenv from "dotenv";
 import express from "express";
 
-import type { Request } from "express";
 import { connectMongoDb } from "./db";
 import { createAppRouter } from "./routes";
 import { internalErrorMiddleware } from "./routes/error.middleware";
+import { errorLogger, requestLogger } from "./middlewares";
 
 dotenv.config();
-
-export type RequestWithUser = Request & {
-  user: {
-    _id: string;
-  };
-};
 
 const startApp = async () => {
   await connectMongoDb();
@@ -24,18 +18,16 @@ const startApp = async () => {
     throw new Error("app run error");
   }
 
-  app.use((req, res, next) => {
-    (req as RequestWithUser).user = {
-      _id: "6a9b53d345d93d424ba9be97",
-    };
-
-    next();
-  });
   app.use(express.json());
 
-  const router = createAppRouter();
+  app.use(requestLogger);
+
+  const router = createAppRouter(app);
 
   app.use(router);
+
+  app.use(errorLogger);
+
   app.use(internalErrorMiddleware);
 
   app.listen(PORT, () => {

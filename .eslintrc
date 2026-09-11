@@ -3,6 +3,14 @@
     "es2021": true,
     "node": true
   },
+  "overrides": [
+    {
+      "files": ["**/*.d.ts"],
+      "rules": {
+        "no-unused-vars": "off"
+      }
+    }
+  ],
   "extends": [
     "airbnb-base"
   ],

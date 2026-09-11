@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  getMeController,
   getUserByIdController,
   getUsersController,
   updateUserController,
@@ -38,6 +39,14 @@ const createUpdateUserAvatarRouter = () => {
   return router;
 };
 
+const createGetMeRouter = () => {
+  const router = Router();
+
+  router.get("/me", getMeController);
+
+  return router;
+};
+
 export const createUsersRouter = () => {
   const router = Router();
 
@@ -45,11 +54,13 @@ export const createUsersRouter = () => {
   const getUserByIdRouter = createGetUserByIdRouter();
   const updateUserRouter = createUpdateUserRouter();
   const updateUserAvatarRouter = createUpdateUserAvatarRouter();
+  const getMeRouter = createGetMeRouter();
 
   router.use(getUsersRouter);
   router.use(getUserByIdRouter);
   router.use(updateUserRouter);
   router.use(updateUserAvatarRouter);
+  router.use(getMeRouter);
 
   return router;
 };

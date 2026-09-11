@@ -1,15 +1,15 @@
 import type { Request, Response } from "express";
 import { Card } from "../../models";
-import { cardsErrors } from "../../errors";
+import { cardsErrors, userErrors } from "../../errors";
 import { isCorrectId } from "../helpers";
 
 export const deleteCardController = async (
   req: Request<{ id: string }>,
   res: Response,
 ) => {
-  const { id } = req.params;
+  const { id: cardId } = req.params;
 
-  const isCorrectCardId = isCorrectId(id);
+  const isCorrectCardId = isCorrectId(cardId);
 
   if (!isCorrectCardId) {
     const { message, code } = cardsErrors.incorrectId;
@@ -19,7 +19,7 @@ export const deleteCardController = async (
     return;
   }
 
-  const card = await Card.findByIdAndDelete(id);
+  const card = await Card.findById({ _id: cardId });
 
   if (!card) {
     const { message, code } = cardsErrors.noCard;
@@ -29,5 +29,15 @@ export const deleteCardController = async (
     return;
   }
 
-  res.send({});
+  if (String(card?.owner) === req.user?._id) {
+    const deletedCard = await Card.deleteOne({ _id: cardId });
+
+    res.send(deletedCard);
+
+    return;
+  }
+
+  const { message, code } = userErrors.incorrectDeleteCardRights;
+
+  res.status(code).send({ message });
 };

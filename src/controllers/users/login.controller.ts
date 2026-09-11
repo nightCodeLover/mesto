@@ -1,8 +1,8 @@
 import type { Request, Response } from "express";
-import { User } from "../../models";
-import { userErrors } from "../../errors";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { User } from "../../models";
+import { userErrors } from "../../errors";
 import { JWT_TOKEN_AGE } from "../../constants";
 import { getJWTSecret } from "../../utils";
 
@@ -25,7 +25,7 @@ export const loginController = async (
 ) => {
   const { email, password } = req.body;
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email }).select("+password");
 
   if (!user) {
     sendNoAuthError(res);

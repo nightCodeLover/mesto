@@ -5,6 +5,42 @@ import {
   NOT_FOUND_ERROR_CODE,
 } from "./constants";
 
+export class BadRequestError extends Error {
+  statusCode: number;
+
+  constructor(message: string) {
+    super(message);
+    this.statusCode = BAD_REQUEST_ERROR_CODE;
+  }
+}
+
+export class NotFoundError extends Error {
+  statusCode: number;
+
+  constructor(message: string) {
+    super(message);
+    this.statusCode = NOT_FOUND_ERROR_CODE;
+  }
+}
+
+export class NotAuthorizedError extends Error {
+  statusCode: number;
+
+  constructor(message: string) {
+    super();
+    this.statusCode = NO_AUTH_ERROR_CODE;
+  }
+}
+
+export class InternalServerError extends Error {
+  statusCode: number;
+
+  constructor(message: string) {
+    super();
+    this.statusCode = INTERNAL_SERVER_ERROR_CODE;
+  }
+}
+
 export const userErrors = {
   incorrectPostData: {
     code: BAD_REQUEST_ERROR_CODE,
@@ -29,6 +65,10 @@ export const userErrors = {
   incorrectEmailPas: {
     code: NO_AUTH_ERROR_CODE,
     message: "Неверные логин или пароль",
+  },
+  incorrectDeleteCardRights: {
+    code: BAD_REQUEST_ERROR_CODE,
+    message: "Нет прав на удаление текущей карточки",
   },
 };
 

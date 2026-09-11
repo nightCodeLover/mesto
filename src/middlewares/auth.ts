@@ -1,6 +1,6 @@
 import { NextFunction, Response, Request } from "express";
-import { noAuthError } from "../errors";
 import jwt from "jsonwebtoken";
+import { noAuthError } from "../errors";
 import { getJWTSecret } from "../utils";
 
 const AUTH_START_WORD = "Bearer ";
@@ -15,7 +15,9 @@ export const authMiddleware = (
   if (!authorization || !authorization.startsWith(AUTH_START_WORD)) {
     const { code, message } = noAuthError;
 
-    return res.status(code).json({ message });
+    res.status(code).json({ message });
+
+    return;
   }
 
   const secret = getJWTSecret();
