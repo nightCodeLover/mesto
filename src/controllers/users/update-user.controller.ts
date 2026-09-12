@@ -1,8 +1,13 @@
 import type { Request, Response } from "express";
 import mongoose from "mongoose";
-import type { RequestWithUser } from "../../app";
 import { User, UserModel } from "../../models";
-import { userErrors } from "../../errors";
+import {
+  BadRequestError,
+  noAuthError,
+  NotAuthorizedError,
+  NotFoundError,
+  userErrors,
+} from "../../errors";
 
 export type UpdateUserModel = Partial<UserModel>;
 
@@ -11,9 +16,11 @@ export const updateUserController = async (
   res: Response,
 ) => {
   try {
-    const authenticatedRequest = req as typeof req & RequestWithUser;
+    const id = req.user?._id;
 
-    const id = authenticatedRequest.user._id;
+    if (!id) {
+      throw new NotAuthorizedError(noAuthError.message);
+    }
 
     const { name, avatar, about } = req.body;
 
@@ -24,11 +31,7 @@ export const updateUserController = async (
     if (about && about.length) updates.about = about;
 
     if (!Object.keys(updates).length) {
-      const { code, message } = userErrors.incorrectPatchUserData;
-
-      res.status(code).send({ message });
-
-      return;
+      throw new BadRequestError(userErrors.incorrectPatchUserData.message);
     }
 
     const user = await User.findByIdAndUpdate(
@@ -41,22 +44,13 @@ export const updateUserController = async (
     );
 
     if (!user) {
-      const { code, message } = userErrors.noUser;
-
-      res.status(code).send({ message });
-      return;
+      throw new NotFoundError(userErrors.noUser.message);
     }
 
     res.send(user);
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
-      const { message, code } = userErrors.incorrectPatchUserData;
-
-      res.status(code).send({
-        message,
-      });
-
-      return;
+      throw new BadRequestError(userErrors.incorrectPatchUserData.message);
     }
 
     throw error;

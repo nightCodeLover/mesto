@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { User } from "../../models";
-import { userErrors } from "../../errors";
+import { NotAuthorizedError, userErrors } from "../../errors";
 import { JWT_TOKEN_AGE } from "../../constants";
 import { getJWTSecret } from "../../utils";
 
@@ -13,12 +13,6 @@ type LoginRequestBody = {
 
 const authSuccessMessage = "Аутентификация прошла успешно";
 
-const sendNoAuthError = (res: Response) => {
-  const { message, code } = userErrors.incorrectEmailPas;
-
-  return res.status(code).send({ message });
-};
-
 export const loginController = async (
   req: Request<Record<string, unknown>, unknown, LoginRequestBody>,
   res: Response,
@@ -28,17 +22,13 @@ export const loginController = async (
   const user = await User.findOne({ email }).select("+password");
 
   if (!user) {
-    sendNoAuthError(res);
-
-    return;
+    throw new NotAuthorizedError(userErrors.incorrectEmailPas.message);
   }
 
   const matched = await bcrypt.compare(password, user.password);
 
   if (!matched) {
-    sendNoAuthError(res);
-
-    return;
+    throw new NotAuthorizedError(userErrors.incorrectEmailPas.message);
   }
 
   const secret = getJWTSecret();

@@ -1,10 +1,15 @@
+import { errors } from "celebrate";
 import dotenv from "dotenv";
 import express from "express";
 
 import { connectMongoDb } from "./db";
 import { createAppRouter } from "./routes";
-import { internalErrorMiddleware } from "./routes/error.middleware";
-import { errorLogger, requestLogger } from "./middlewares";
+import {
+  errorCatcherMiddleware,
+  errorLogger,
+  requestLogger,
+  unknownPathErrorMiddleware,
+} from "./middlewares";
 
 dotenv.config();
 
@@ -26,9 +31,13 @@ const startApp = async () => {
 
   app.use(router);
 
+  app.use(unknownPathErrorMiddleware);
+
   app.use(errorLogger);
 
-  app.use(internalErrorMiddleware);
+  app.use(errors());
+
+  app.use(errorCatcherMiddleware);
 
   app.listen(PORT, () => {
     console.log("Server started on port", PORT);

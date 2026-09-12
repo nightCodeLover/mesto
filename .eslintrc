@@ -9,6 +9,12 @@
       "rules": {
         "no-unused-vars": "off"
       }
+    },
+    {
+      "files": ["src/errors.ts"],
+      "rules": {
+        "max-classes-per-file": "off"
+      }
     }
   ],
   "extends": [

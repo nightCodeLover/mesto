@@ -1,8 +1,14 @@
 import type { Request, Response } from "express";
 import mongoose from "mongoose";
 import { Card } from "../../models";
-import { cardsErrors } from "../../errors";
-import { dislikeCard, getMockOwner, isCorrectId } from "../helpers";
+import {
+  BadRequestError,
+  cardsErrors,
+  noAuthError,
+  NotAuthorizedError,
+  NotFoundError,
+} from "../../errors";
+import { dislikeCard, isCorrectId } from "../helpers";
 
 export const deleteLikeFromCardController = async (
   req: Request<{ cardId: string }>,
@@ -13,47 +19,35 @@ export const deleteLikeFromCardController = async (
   const isCorrectCardId = isCorrectId(cardId);
 
   if (!isCorrectCardId) {
-    const { message, code } = cardsErrors.incorrectId;
-
-    res.status(code).send({ message });
-
-    return;
+    throw new BadRequestError(cardsErrors.incorrectId.message);
   }
 
   const card = await Card.findById(cardId);
 
   if (!card) {
-    const { code, message } = cardsErrors.noCard;
-
-    res.status(code).send({ message });
-
-    return;
+    throw new NotFoundError(cardsErrors.noCard.message);
   }
 
-  const mockOwner = getMockOwner(req);
+  const userId = req.user?._id;
+
+  if (!userId) {
+    throw new NotAuthorizedError(noAuthError.message);
+  }
+
   try {
     const updatedCard = await dislikeCard({
       cardId,
-      userId: mockOwner,
+      userId,
     });
 
     if (!updatedCard) {
-      const { message, code } = cardsErrors.incorrectDeleteLike;
-
-      res.status(code).send({
-        message,
-      });
-
-      return;
+      throw new BadRequestError(cardsErrors.incorrectDeleteLike.message);
     }
 
     res.send(updatedCard);
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
-      const { message, code } = cardsErrors.incorrectDeleteLike;
-
-      res.status(code).send({ message });
-      return;
+      throw new BadRequestError(cardsErrors.incorrectDeleteLike.message);
     }
 
     throw error;

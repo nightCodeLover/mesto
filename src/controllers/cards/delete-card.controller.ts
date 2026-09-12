@@ -1,6 +1,8 @@
 import type { Request, Response } from "express";
 import { Card } from "../../models";
-import { cardsErrors, userErrors } from "../../errors";
+import {
+  BadRequestError, cardsErrors, NotFoundError, userErrors,
+} from "../../errors";
 import { isCorrectId } from "../helpers";
 
 export const deleteCardController = async (
@@ -12,21 +14,13 @@ export const deleteCardController = async (
   const isCorrectCardId = isCorrectId(cardId);
 
   if (!isCorrectCardId) {
-    const { message, code } = cardsErrors.incorrectId;
-
-    res.status(code).send({ message });
-
-    return;
+    throw new BadRequestError(cardsErrors.incorrectId.message);
   }
 
-  const card = await Card.findById({ _id: cardId });
+  const card = await Card.findById(cardId);
 
   if (!card) {
-    const { message, code } = cardsErrors.noCard;
-
-    res.status(code).send({ message });
-
-    return;
+    throw new NotFoundError(cardsErrors.noCard.message);
   }
 
   if (String(card?.owner) === req.user?._id) {
@@ -37,7 +31,5 @@ export const deleteCardController = async (
     return;
   }
 
-  const { message, code } = userErrors.incorrectDeleteCardRights;
-
-  res.status(code).send({ message });
+  throw new BadRequestError(userErrors.incorrectDeleteCardRights.message);
 };

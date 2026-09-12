@@ -1,3 +1,4 @@
+import { celebrate, Joi, Segments } from "celebrate";
 import { Router } from "express";
 import {
   deleteCardController,
@@ -18,7 +19,16 @@ const createGetCardsRouter = () => {
 const createPostCardRouter = () => {
   const router = Router();
 
-  router.post("/", postCardController);
+  router.post(
+    "/",
+    celebrate({
+      [Segments.BODY]: Joi.object().keys({
+        name: Joi.string().min(2).max(30),
+        link: Joi.string().required().uri(),
+      }),
+    }),
+    postCardController,
+  );
 
   return router;
 };

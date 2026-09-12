@@ -1,7 +1,5 @@
-import type { Request } from "express";
 import mongoose from "mongoose";
 import { Card } from "../models";
-import type { RequestWithUser } from "../app";
 
 export const isCorrectId = (id: string): boolean => mongoose.isObjectIdOrHexString(id);
 
@@ -46,10 +44,4 @@ export const createCard = async ({
     link,
     owner: ownerId,
   });
-};
-
-export const getMockOwner = (req: Request) => {
-  const authenticatedRequest = req as typeof req & RequestWithUser;
-
-  return authenticatedRequest.user._id;
 };

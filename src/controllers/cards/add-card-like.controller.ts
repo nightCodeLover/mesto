@@ -1,8 +1,14 @@
 import type { Request, Response } from "express";
 import mongoose from "mongoose";
 import { Card } from "../../models";
-import { cardsErrors } from "../../errors";
-import { getMockOwner, isCorrectId, likeCard } from "../helpers";
+import {
+  BadRequestError,
+  cardsErrors,
+  noAuthError,
+  NotAuthorizedError,
+  NotFoundError,
+} from "../../errors";
+import { isCorrectId, likeCard } from "../helpers";
 
 export const putCardLikesController = async (
   req: Request<{ cardId: string }>,
@@ -13,45 +19,32 @@ export const putCardLikesController = async (
   const isCorrectCardId = isCorrectId(cardId);
 
   if (!isCorrectCardId) {
-    const { message, code } = cardsErrors.incorrectId;
-
-    res.status(code).send({ message });
-
-    return;
+    throw new BadRequestError(cardsErrors.incorrectId.message);
   }
 
-  const mockOwner = getMockOwner(req);
+  const userId = req.user?._id;
+
+  if (!userId) {
+    throw new NotAuthorizedError(noAuthError.message);
+  }
 
   const card = await Card.findById(cardId);
 
   if (!card) {
-    const { code, message } = cardsErrors.noCard;
-
-    res.status(code).send({ message });
-
-    return;
+    throw new NotFoundError(cardsErrors.noCard.message);
   }
 
   try {
-    const updatedCard = await likeCard({ cardId, userId: mockOwner });
+    const updatedCard = await likeCard({ cardId, userId });
 
     if (!updatedCard) {
-      const { message, code } = cardsErrors.incorrectPutLike;
-
-      res.status(code).send({
-        message,
-      });
-
-      return;
+      throw new BadRequestError(cardsErrors.incorrectPutLike.message);
     }
 
     res.send(updatedCard);
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
-      const { message, code } = cardsErrors.incorrectPutLike;
-
-      res.status(code).send({ message });
-      return;
+      throw new BadRequestError(cardsErrors.incorrectPutLike.message);
     }
 
     throw error;

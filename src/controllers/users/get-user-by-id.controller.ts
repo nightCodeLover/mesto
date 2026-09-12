@@ -1,6 +1,8 @@
 import type { Request, Response } from "express";
 import { User } from "../../models";
-import { userErrors } from "../../errors";
+import {
+  BadRequestError, NotFoundError, userErrors,
+} from "../../errors";
 import { isCorrectId } from "../helpers";
 
 export const getUserByIdController = async (
@@ -12,21 +14,13 @@ export const getUserByIdController = async (
   const isCorrectUserId = isCorrectId(id);
 
   if (!isCorrectUserId) {
-    const { message, code } = userErrors.incorrectId;
-
-    res.status(code).send({ message });
-
-    return;
+    throw new BadRequestError(userErrors.incorrectId.message);
   }
 
   const user = await User.findById(id);
 
   if (!user) {
-    const { code, message } = userErrors.noUser;
-
-    res.status(code).send({ message });
-
-    return;
+    throw new NotFoundError(userErrors.noUser.message);
   }
 
   res.send(user);

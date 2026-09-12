@@ -1,8 +1,13 @@
 import type { Request, Response } from "express";
 import mongoose from "mongoose";
-import type { RequestWithUser } from "../../app";
 import { User } from "../../models";
-import { userErrors } from "../../errors";
+import {
+  BadRequestError,
+  noAuthError,
+  NotAuthorizedError,
+  NotFoundError,
+  userErrors,
+} from "../../errors";
 
 export type UpdateUserAvatar = {
   avatar: string;
@@ -13,9 +18,11 @@ export const updateUsersAvatarController = async (
   res: Response,
 ) => {
   try {
-    const authenticatedRequest = req as typeof req & RequestWithUser;
+    const id = req.user?._id;
 
-    const id = authenticatedRequest.user._id;
+    if (!id) {
+      throw new NotAuthorizedError(noAuthError.message);
+    }
 
     const { avatar } = req.body;
 
@@ -29,18 +36,13 @@ export const updateUsersAvatarController = async (
     );
 
     if (!user) {
-      const { code, message } = userErrors.noUser;
-
-      res.status(code).send({ message });
-    } else {
-      res.send(user);
+      throw new NotFoundError(userErrors.noUser.message);
     }
+
+    res.send(user);
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
-      const { message, code } = userErrors.incorrectPatchAvatarData;
-
-      res.status(code).send({ message });
-      return;
+      throw new BadRequestError(userErrors.incorrectPatchAvatarData.message);
     }
 
     throw error;

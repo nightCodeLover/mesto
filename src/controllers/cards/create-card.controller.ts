@@ -2,8 +2,10 @@ import type { Request, Response } from "express";
 import mongoose from "mongoose";
 import { CREATED_STATUS_CODE } from "../../constants";
 import type { CardModel } from "../../models";
-import { cardsErrors } from "../../errors";
-import { createCard, getMockOwner } from "../helpers";
+import {
+  BadRequestError, cardsErrors, noAuthError, NotAuthorizedError,
+} from "../../errors";
+import { createCard } from "../helpers";
 
 export const postCardController = async (
   req: Request<Record<string, never>, unknown, CardModel>,
@@ -11,23 +13,23 @@ export const postCardController = async (
 ) => {
   const { link, name } = req.body;
 
-  const mockOwner = getMockOwner(req);
+  const ownerId = req.user?._id;
+
+  if (!ownerId) {
+    throw new NotAuthorizedError(noAuthError.message);
+  }
 
   try {
     await createCard({
       name,
       link,
-      ownerId: mockOwner,
+      ownerId,
     });
 
     res.status(CREATED_STATUS_CODE).send({});
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
-      const { message, code } = cardsErrors.incorrectPostData;
-
-      res.status(code).send({ message });
-
-      return;
+      throw new BadRequestError(cardsErrors.incorrectPostData.message);
     }
 
     throw error;
