@@ -23,7 +23,7 @@ const createPostCardRouter = () => {
     "/",
     celebrate({
       [Segments.BODY]: Joi.object().keys({
-        name: Joi.string().min(2).max(30),
+        name: Joi.string().min(2).max(30).required(),
         link: Joi.string().required().uri(),
       }),
     }),
@@ -36,7 +36,15 @@ const createPostCardRouter = () => {
 const createDeleteCardRouter = () => {
   const router = Router();
 
-  router.delete("/:id", deleteCardController);
+  router.delete(
+    "/:id",
+    celebrate({
+      [Segments.PARAMS]: Joi.object().keys({
+        id: Joi.string().hex().length(24).required(),
+      }),
+    }),
+    deleteCardController,
+  );
 
   return router;
 };
@@ -44,7 +52,15 @@ const createDeleteCardRouter = () => {
 const createPutLikeOnCardRouter = () => {
   const router = Router();
 
-  router.put("/:cardId/likes", putCardLikesController);
+  router.put(
+    "/:cardId/likes",
+    celebrate({
+      [Segments.PARAMS]: Joi.object().keys({
+        cardId: Joi.string().hex().length(24).required(),
+      }),
+    }),
+    putCardLikesController,
+  );
 
   return router;
 };
@@ -52,7 +68,15 @@ const createPutLikeOnCardRouter = () => {
 const createDeleteLikeFromCardRouter = () => {
   const router = Router();
 
-  router.delete("/:cardId/likes", deleteLikeFromCardController);
+  router.delete(
+    "/:cardId/likes",
+    celebrate({
+      [Segments.PARAMS]: Joi.object().keys({
+        cardId: Joi.string().hex().length(24).required(),
+      }),
+    }),
+    deleteLikeFromCardController,
+  );
 
   return router;
 };

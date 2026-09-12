@@ -8,7 +8,9 @@ export const createUserController = async (
   req: Request<Record<string, never>, unknown, UserModel>,
   res: Response,
 ) => {
-  const { name, avatar, about, password, email } = req.body;
+  const {
+    name, avatar, about, password, email,
+  } = req.body;
 
   try {
     const user = await User.findOne({ email });

@@ -5,7 +5,16 @@ import { createUserController, loginController } from "../controllers";
 const createLoginRouter = () => {
   const router = Router();
 
-  router.post("/signin", loginController);
+  router.post(
+    "/signin",
+    celebrate({
+      [Segments.BODY]: Joi.object().keys({
+        email: Joi.string().email().required(),
+        password: Joi.string().required(),
+      }),
+    }),
+    loginController,
+  );
 
   return router;
 };
