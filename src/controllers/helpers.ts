@@ -29,19 +29,3 @@ export const dislikeCard = async ({
     runValidators: true,
   },
 );
-
-export const createCard = async ({
-  link,
-  name,
-  ownerId,
-}: {
-  link: string;
-  name: string;
-  ownerId: string;
-}) => {
-  await Card.create({
-    name,
-    link,
-    owner: ownerId,
-  });
-};

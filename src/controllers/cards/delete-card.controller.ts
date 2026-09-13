@@ -1,7 +1,11 @@
 import type { Request, Response } from "express";
 import { Card } from "../../models";
 import {
-  BadRequestError, cardsErrors, NotFoundError, userErrors,
+  BadRequestError,
+  cardsErrors,
+  ForbiddenError,
+  NotFoundError,
+  userErrors,
 } from "../../errors";
 import { isCorrectId } from "../helpers";
 
@@ -31,5 +35,5 @@ export const deleteCardController = async (
     return;
   }
 
-  throw new BadRequestError(userErrors.incorrectDeleteCardRights.message);
+  throw new ForbiddenError(userErrors.incorrectDeleteCardRights.message);
 };

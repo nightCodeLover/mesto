@@ -1,10 +1,14 @@
-import {
-  BAD_REQUEST_ERROR_CODE,
-  CONFLICT_ERROR_CODE,
-  INTERNAL_SERVER_ERROR_CODE,
-  NO_AUTH_ERROR_CODE,
-  NOT_FOUND_ERROR_CODE,
-} from "./constants";
+const NO_AUTH_ERROR_CODE = 401;
+
+const BAD_REQUEST_ERROR_CODE = 400;
+
+const FORBIDDEN_ERROR_CODE = 403;
+
+const NOT_FOUND_ERROR_CODE = 404;
+
+const CONFLICT_ERROR_CODE = 409;
+
+const INTERNAL_SERVER_ERROR_CODE = 500;
 
 export type HttpError = Error & {
   statusCode: number;
@@ -52,6 +56,15 @@ export class ConflictError extends Error {
   constructor(message: string) {
     super(message);
     this.statusCode = CONFLICT_ERROR_CODE;
+  }
+}
+
+export class ForbiddenError extends Error {
+  statusCode: number;
+
+  constructor(message: string) {
+    super(message);
+    this.statusCode = FORBIDDEN_ERROR_CODE;
   }
 }
 

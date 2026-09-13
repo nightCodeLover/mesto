@@ -2,6 +2,7 @@ import { errors } from "celebrate";
 import dotenv from "dotenv";
 import express from "express";
 
+import cookieParser from "cookie-parser";
 import { connectMongoDb } from "./db";
 import { createAppRouter } from "./routes";
 import {
@@ -26,6 +27,8 @@ const startApp = async () => {
   app.use(express.json());
 
   app.use(requestLogger);
+
+  app.use(cookieParser());
 
   const router = createAppRouter(app);
 
