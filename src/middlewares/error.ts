@@ -1,4 +1,6 @@
-import type { NextFunction, Request, RequestHandler, Response } from "express";
+import type {
+  NextFunction, Request, RequestHandler, Response,
+} from "express";
 import type { HttpError } from "../errors";
 import {
   InternalServerError,
@@ -7,10 +9,9 @@ import {
   unknownPathErrorMessage,
 } from "../errors";
 
-const isHttpError = (error: unknown): error is HttpError =>
-  error instanceof Error &&
-  "statusCode" in error &&
-  typeof error.statusCode === "number";
+const isHttpError = (error: unknown): error is HttpError => error instanceof Error
+  && "statusCode" in error
+  && typeof error.statusCode === "number";
 
 export const unknownPathErrorMiddleware: RequestHandler = () => {
   throw new NotFoundError(unknownPathErrorMessage);

@@ -13,7 +13,9 @@ export const createUserController = async (
   req: Request<Record<string, never>, unknown, UserModel>,
   res: Response,
 ) => {
-  const { name, avatar, about, password, email } = req.body;
+  const {
+    name, avatar, about, password, email,
+  } = req.body;
 
   try {
     const hashPas = await bcrypt.hash(password, SALT_LENGTH);
@@ -34,8 +36,8 @@ export const createUserController = async (
     });
   } catch (error) {
     if (
-      error instanceof mongoose.mongo.MongoServerError &&
-      error.code === USER_EXIST_CODE
+      error instanceof mongoose.mongo.MongoServerError
+      && error.code === USER_EXIST_CODE
     ) {
       throw new ConflictError(userErrors.userExistMessage);
     }
