@@ -1,20 +1,19 @@
-import type {
-  NextFunction, Request, RequestHandler, Response,
-} from "express";
+import type { NextFunction, Request, RequestHandler, Response } from "express";
 import type { HttpError } from "../errors";
-import { INTERNAL_SERVER_ERROR_CODE } from "../constants";
 import {
-  internalError, NotFoundError, unknownPathError,
+  InternalServerError,
+  internalErrorMessage,
+  NotFoundError,
+  unknownPathErrorMessage,
 } from "../errors";
 
-const isHttpError = (error: unknown): error is HttpError => (
-  error instanceof Error
-    && "statusCode" in error
-    && typeof error.statusCode === "number"
-);
+const isHttpError = (error: unknown): error is HttpError =>
+  error instanceof Error &&
+  "statusCode" in error &&
+  typeof error.statusCode === "number";
 
 export const unknownPathErrorMiddleware: RequestHandler = () => {
-  throw new NotFoundError(unknownPathError.message);
+  throw new NotFoundError(unknownPathErrorMessage);
 };
 
 export const errorCatcherMiddleware = (
@@ -33,7 +32,7 @@ export const errorCatcherMiddleware = (
     return;
   }
 
-  res.status(INTERNAL_SERVER_ERROR_CODE).send({
-    message: internalError.message,
-  });
+  const { statusCode, message } = new InternalServerError(internalErrorMessage);
+
+  res.status(statusCode).send({ message });
 };

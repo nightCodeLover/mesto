@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import { User } from "../../models";
 import {
   BadRequestError,
-  noAuthError,
+  noAuthErrorMessage,
   NotAuthorizedError,
   NotFoundError,
   userErrors,
@@ -21,7 +21,7 @@ export const updateUsersAvatarController = async (
     const id = req.user?._id;
 
     if (!id) {
-      throw new NotAuthorizedError(noAuthError.message);
+      throw new NotAuthorizedError(noAuthErrorMessage);
     }
 
     const { avatar } = req.body;
@@ -36,13 +36,13 @@ export const updateUsersAvatarController = async (
     );
 
     if (!user) {
-      throw new NotFoundError(userErrors.noUser.message);
+      throw new NotFoundError(userErrors.noUserMessage);
     }
 
     res.send(user);
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
-      throw new BadRequestError(userErrors.incorrectPatchAvatarData.message);
+      throw new BadRequestError(userErrors.incorrectPatchAvatarDataMessage);
     }
 
     throw error;

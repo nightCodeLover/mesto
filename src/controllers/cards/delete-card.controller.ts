@@ -18,13 +18,13 @@ export const deleteCardController = async (
   const isCorrectCardId = isCorrectId(cardId);
 
   if (!isCorrectCardId) {
-    throw new BadRequestError(cardsErrors.incorrectId.message);
+    throw new BadRequestError(cardsErrors.incorrectIdMessage);
   }
 
   const card = await Card.findById(cardId);
 
   if (!card) {
-    throw new NotFoundError(cardsErrors.noCard.message);
+    throw new NotFoundError(cardsErrors.noCardMessage);
   }
 
   if (String(card?.owner) === req.user?._id) {
@@ -35,5 +35,5 @@ export const deleteCardController = async (
     return;
   }
 
-  throw new ForbiddenError(userErrors.incorrectDeleteCardRights.message);
+  throw new ForbiddenError(userErrors.incorrectDeleteCardRightsMessage);
 };

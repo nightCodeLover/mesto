@@ -14,13 +14,13 @@ export const getUserByIdController = async (
   const isCorrectUserId = isCorrectId(id);
 
   if (!isCorrectUserId) {
-    throw new BadRequestError(userErrors.incorrectId.message);
+    throw new BadRequestError(userErrors.incorrectIdMessage);
   }
 
   const user = await User.findById(id);
 
   if (!user) {
-    throw new NotFoundError(userErrors.noUser.message);
+    throw new NotFoundError(userErrors.noUserMessage);
   }
 
   res.send(user);

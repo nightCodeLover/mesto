@@ -1,6 +1,6 @@
 import type { NextFunction, Response, Request } from "express";
 import jwt from "jsonwebtoken";
-import { noAuthError, NotAuthorizedError } from "../errors";
+import { noAuthErrorMessage, NotAuthorizedError } from "../errors";
 import { getJWTSecret } from "../utils";
 
 export const authMiddleware = (
@@ -11,7 +11,7 @@ export const authMiddleware = (
   const token = req.cookies?.jwt;
 
   if (typeof token !== "string") {
-    throw new NotAuthorizedError(noAuthError.message);
+    throw new NotAuthorizedError(noAuthErrorMessage);
   }
 
   const secret = getJWTSecret();
@@ -21,11 +21,11 @@ export const authMiddleware = (
   try {
     payload = jwt.verify(token, secret);
   } catch (error) {
-    throw new NotAuthorizedError(noAuthError.message);
+    throw new NotAuthorizedError(noAuthErrorMessage);
   }
 
   if (typeof payload === "string" || typeof payload._id !== "string") {
-    throw new NotAuthorizedError(noAuthError.message);
+    throw new NotAuthorizedError(noAuthErrorMessage);
   }
 
   req.user = { _id: payload._id };

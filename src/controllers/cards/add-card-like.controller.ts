@@ -4,7 +4,7 @@ import { Card } from "../../models";
 import {
   BadRequestError,
   cardsErrors,
-  noAuthError,
+  noAuthErrorMessage,
   NotAuthorizedError,
   NotFoundError,
 } from "../../errors";
@@ -19,32 +19,32 @@ export const putCardLikesController = async (
   const isCorrectCardId = isCorrectId(cardId);
 
   if (!isCorrectCardId) {
-    throw new BadRequestError(cardsErrors.incorrectId.message);
+    throw new BadRequestError(cardsErrors.incorrectIdMessage);
   }
 
   const userId = req.user?._id;
 
   if (!userId) {
-    throw new NotAuthorizedError(noAuthError.message);
+    throw new NotAuthorizedError(noAuthErrorMessage);
   }
 
   const card = await Card.findById(cardId);
 
   if (!card) {
-    throw new NotFoundError(cardsErrors.noCard.message);
+    throw new NotFoundError(cardsErrors.noCardMessage);
   }
 
   try {
     const updatedCard = await likeCard({ cardId, userId });
 
     if (!updatedCard) {
-      throw new BadRequestError(cardsErrors.incorrectPutLike.message);
+      throw new BadRequestError(cardsErrors.incorrectPutLikeMessage);
     }
 
     res.send(updatedCard);
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
-      throw new BadRequestError(cardsErrors.incorrectPutLike.message);
+      throw new BadRequestError(cardsErrors.incorrectPutLikeMessage);
     }
 
     throw error;

@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import { User, UserModel } from "../../models";
 import {
   BadRequestError,
-  noAuthError,
+  noAuthErrorMessage,
   NotAuthorizedError,
   NotFoundError,
   userErrors,
@@ -19,7 +19,7 @@ export const updateUserController = async (
     const id = req.user?._id;
 
     if (!id) {
-      throw new NotAuthorizedError(noAuthError.message);
+      throw new NotAuthorizedError(noAuthErrorMessage);
     }
 
     const { name, avatar, about } = req.body;
@@ -31,7 +31,7 @@ export const updateUserController = async (
     if (about && about.length) updates.about = about;
 
     if (!Object.keys(updates).length) {
-      throw new BadRequestError(userErrors.incorrectPatchUserData.message);
+      throw new BadRequestError(userErrors.incorrectPatchUserDataMessage);
     }
 
     const user = await User.findByIdAndUpdate(
@@ -44,13 +44,13 @@ export const updateUserController = async (
     );
 
     if (!user) {
-      throw new NotFoundError(userErrors.noUser.message);
+      throw new NotFoundError(userErrors.noUserMessage);
     }
 
     res.send(user);
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
-      throw new BadRequestError(userErrors.incorrectPatchUserData.message);
+      throw new BadRequestError(userErrors.incorrectPatchUserDataMessage);
     }
 
     throw error;

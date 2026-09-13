@@ -4,7 +4,7 @@ import { Card } from "../../models";
 import {
   BadRequestError,
   cardsErrors,
-  noAuthError,
+  noAuthErrorMessage,
   NotAuthorizedError,
   NotFoundError,
 } from "../../errors";
@@ -19,19 +19,19 @@ export const deleteLikeFromCardController = async (
   const isCorrectCardId = isCorrectId(cardId);
 
   if (!isCorrectCardId) {
-    throw new BadRequestError(cardsErrors.incorrectId.message);
+    throw new BadRequestError(cardsErrors.incorrectIdMessage);
   }
 
   const card = await Card.findById(cardId);
 
   if (!card) {
-    throw new NotFoundError(cardsErrors.noCard.message);
+    throw new NotFoundError(cardsErrors.noCardMessage);
   }
 
   const userId = req.user?._id;
 
   if (!userId) {
-    throw new NotAuthorizedError(noAuthError.message);
+    throw new NotAuthorizedError(noAuthErrorMessage);
   }
 
   try {
@@ -41,13 +41,13 @@ export const deleteLikeFromCardController = async (
     });
 
     if (!updatedCard) {
-      throw new BadRequestError(cardsErrors.incorrectDeleteLike.message);
+      throw new BadRequestError(cardsErrors.incorrectDeleteLikeMessage);
     }
 
     res.send(updatedCard);
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
-      throw new BadRequestError(cardsErrors.incorrectDeleteLike.message);
+      throw new BadRequestError(cardsErrors.incorrectDeleteLikeMessage);
     }
 
     throw error;

@@ -69,57 +69,26 @@ export class ForbiddenError extends Error {
 }
 
 export const userErrors = {
-  incorrectPostData: {
-    message: "Переданы некорректные данные при создании пользователя",
-  },
-  noUser: {
-    message: "Пользователь по указанному _id не найден",
-  },
-  incorrectPatchUserData: {
-    message: "Переданы некорректные данные при обновлении профиля",
-  },
-  incorrectPatchAvatarData: {
-    message: "Переданы некорректные данные при обновлении аватара",
-  },
-  incorrectId: {
-    message: "Передан некорректный id",
-  },
-  incorrectEmailPas: {
-    message: "Неверные логин или пароль",
-  },
-  incorrectDeleteCardRights: {
-    message: "Нет прав на удаление текущей карточки",
-  },
-  userExist: { message: "Пользователь уже существует" },
+  incorrectPostDataMessage: "Переданы некорректные данные при создании пользователя",
+  noUserMessage: "Пользователь по указанному _id не найден",
+  incorrectPatchUserDataMessage: "Переданы некорректные данные при обновлении профиля",
+  incorrectPatchAvatarDataMessage: "Переданы некорректные данные при обновлении аватара",
+  incorrectIdMessage: "Передан некорректный id",
+  incorrectEmailPasMessage: "Неверные логин или пароль",
+  incorrectDeleteCardRightsMessage: "Нет прав на удаление текущей карточки",
+  userExistMessage: "Пользователь уже существует",
 };
 
 export const cardsErrors = {
-  incorrectPostData: {
-    message: "Переданы некорректные данные при создании карточки",
-  },
-  noCard: {
-    message: "Карточка с указанным _id не найдена",
-  },
-  incorrectPutLike: {
-    message: "Переданы некорректные данные для постановки лайка",
-  },
-  incorrectDeleteLike: {
-    message: "Переданы некорректные данные для снятия лайка",
-  },
-  incorrectId: {
-    message: "Передан некорректный id",
-  },
+  incorrectPostDataMessage: "Переданы некорректные данные при создании карточки",
+  noCardMessage: "Карточка с указанным _id не найдена",
+  incorrectPutLikeMessage: "Переданы некорректные данные для постановки лайка",
+  incorrectDeleteLikeMessage: "Переданы некорректные данные для снятия лайка",
+  incorrectIdMessage: "Передан некорректный id",
 };
 
-export const internalError = {
-  message: "На сервере произошла ошибка",
-};
+export const internalErrorMessage = "На сервере произошла ошибка";
 
-export const unknownPathError = {
-  message:
-    "Карточка или пользователь не найден или был запрошен несуществующий роут",
-};
+export const unknownPathErrorMessage = "Карточка или пользователь не найден или был запрошен несуществующий роут";
 
-export const noAuthError = {
-  message: "Необходима авторизация",
-};
+export const noAuthErrorMessage = "Необходима авторизация";

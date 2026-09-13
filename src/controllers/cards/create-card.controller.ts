@@ -5,7 +5,7 @@ import { Card, CardModel } from "../../models";
 import {
   BadRequestError,
   cardsErrors,
-  noAuthError,
+  noAuthErrorMessage,
   NotAuthorizedError,
 } from "../../errors";
 
@@ -18,7 +18,7 @@ export const postCardController = async (
   const ownerId = req.user?._id;
 
   if (!ownerId) {
-    throw new NotAuthorizedError(noAuthError.message);
+    throw new NotAuthorizedError(noAuthErrorMessage);
   }
 
   try {
@@ -31,7 +31,7 @@ export const postCardController = async (
     res.status(CREATED_STATUS_CODE).send(createdCard);
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
-      throw new BadRequestError(cardsErrors.incorrectPostData.message);
+      throw new BadRequestError(cardsErrors.incorrectPostDataMessage);
     }
 
     throw error;

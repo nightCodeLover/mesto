@@ -22,13 +22,13 @@ export const loginController = async (
   const user = await User.findOne({ email }).select("+password");
 
   if (!user) {
-    throw new NotAuthorizedError(userErrors.incorrectEmailPas.message);
+    throw new NotAuthorizedError(userErrors.incorrectEmailPasMessage);
   }
 
   const matched = await bcrypt.compare(password, user.password);
 
   if (!matched) {
-    throw new NotAuthorizedError(userErrors.incorrectEmailPas.message);
+    throw new NotAuthorizedError(userErrors.incorrectEmailPasMessage);
   }
 
   const secret = getJWTSecret();
