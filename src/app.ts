@@ -32,6 +32,12 @@ const startApp = async () => {
 
   const router = createAppRouter(app);
 
+  app.get("/crash-test", () => {
+    setTimeout(() => {
+      throw new Error("Сервер сейчас упадёт");
+    }, 0);
+  });
+
   app.use(router);
 
   app.use(unknownPathErrorMiddleware);
