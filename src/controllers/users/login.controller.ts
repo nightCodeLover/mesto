@@ -37,7 +37,12 @@ export const loginController = async (
     expiresIn: JWT_TOKEN_AGE,
   });
 
-  res.cookie("jwt", token, { httpOnly: true, maxAge: JWT_TOKEN_AGE });
+  res.cookie("jwt", token, {
+    httpOnly: true,
+    maxAge: JWT_TOKEN_AGE,
+    sameSite: "none",
+    secure: true,
+  });
 
   res.send({ message: authSuccessMessage });
 };

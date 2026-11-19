@@ -21,6 +21,8 @@ const startApp = async () => {
 
   const { PORT, FRONT_DOMAIN_NAME } = process.env;
 
+  console.log({ FRONT_DOMAIN_NAME });
+
   if (!PORT) {
     throw new Error("app run error");
   }
@@ -32,8 +34,6 @@ const startApp = async () => {
   app.use(cookieParser());
 
   app.use(cors({ credentials: true, origin: FRONT_DOMAIN_NAME }));
-
-  console.log({ FRONT_DOMAIN_NAME: FRONT_DOMAIN_NAME });
 
   const router = createAppRouter(app);
 
