@@ -33,6 +33,8 @@ const startApp = async () => {
 
   app.use(cors({ credentials: true, origin: FRONT_DOMAIN_NAME }));
 
+  console.log({ FRONT_DOMAIN_NAME: FRONT_DOMAIN_NAME });
+
   const router = createAppRouter(app);
 
   app.get("/crash-test", () => {
