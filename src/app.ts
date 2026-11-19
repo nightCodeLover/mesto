@@ -11,6 +11,7 @@ import {
   requestLogger,
   unknownPathErrorMiddleware,
 } from "./middlewares";
+import cors from "cors";
 
 dotenv.config();
 
@@ -18,7 +19,7 @@ const startApp = async () => {
   await connectMongoDb();
   const app = express();
 
-  const { PORT } = process.env;
+  const { PORT, FRONT_DOMAIN_NAME } = process.env;
 
   if (!PORT) {
     throw new Error("app run error");
@@ -29,6 +30,8 @@ const startApp = async () => {
   app.use(requestLogger);
 
   app.use(cookieParser());
+
+  app.use(cors({ credentials: true, origin: FRONT_DOMAIN_NAME }));
 
   const router = createAppRouter(app);
 
