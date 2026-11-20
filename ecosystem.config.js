@@ -1,3 +1,4 @@
+require("dotenv").config({ path: ".env.deploy" });
 require("dotenv").config({ path: ".env.production" });
 
 const {
@@ -17,6 +18,7 @@ module.exports = {
     {
       name: "app",
       script: "./dist/app.js",
+      cwd: __dirname,
 
       env_production: {
         NODE_ENV: "production",
@@ -36,8 +38,7 @@ module.exports = {
       repo: REPO_PATH,
       path: DEPLOY_PATH,
 
-      "pre-deploy-local":
-        "scp ./.env.production ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/shared/.env",
+      "pre-deploy-local": `scp ./.env ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/shared/.env`,
 
       "post-deploy":
         "ln -sfn ../shared/.env .env.production && export PATH=$HOME/.nvm/versions/node/v22.23.5/bin:$PATH && npm install && npm run build && pm2 startOrReload ecosystem.config.js --env production",
