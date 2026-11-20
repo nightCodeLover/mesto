@@ -21,8 +21,6 @@ const startApp = async () => {
 
   const { PORT, FRONT_DOMAIN_NAME } = process.env;
 
-  console.log({ FRONT_DOMAIN_NAME });
-
   if (!PORT) {
     throw new Error("app run error");
   }
