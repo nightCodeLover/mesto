@@ -33,13 +33,13 @@ const startApp = async () => {
 
   app.use(cors({ credentials: true, origin: FRONT_DOMAIN_NAME }));
 
-  const router = createAppRouter(app);
-
   app.get("/crash-test", () => {
     setTimeout(() => {
       throw new Error("Сервер сейчас упадёт");
     }, 0);
   });
+
+  const router = createAppRouter(app);
 
   app.use(router);
 
