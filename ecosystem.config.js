@@ -40,7 +40,7 @@ module.exports = {
         "scp ./.env.production ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/shared/.env",
 
       "post-deploy":
-        "npm install && npm run build && pm2 startOrReload ecosystem.config.js --env production",
+        "export PATH=$HOME/.nvm/versions/node/v22.23.5/bin:$PATH && npm install && npm run build && pm2 startOrReload ecosystem.config.js --env production",
     },
   },
 };
